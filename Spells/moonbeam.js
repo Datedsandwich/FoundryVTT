@@ -99,6 +99,8 @@ if (args[0].tag === "OnUse") {
             .scale(0.25)
             .play()
 
+
+        await caster.unsetFlag("midi-qol", "moonbeam");
         Hooks.off(deleteHook, handleConcentration)
     }
 
