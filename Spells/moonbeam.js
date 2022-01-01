@@ -96,7 +96,7 @@ if (args[0].tag === "OnUse") {
             .file(moonbeamOutro)
             .atLocation(token.object.transform)
             .playbackRate(2)
-            .offset({ x: -canvas.grid.size / 2, y: -canvas.grid.size / 2 })
+            .offset({ x: -canvas.grid.size / 2, y: -canvas.grid.size / 2 }) // Token transform is top left of square
             .belowTokens()
             .scale(0.25)
             .play()
@@ -106,5 +106,5 @@ if (args[0].tag === "OnUse") {
         Hooks.off(deleteHook, handleConcentration)
     }
 
-    Hooks.on(deleteHook, handleConcentration);
+    Hooks.on(deleteHook, handleConcentration); // This will only function if Midi-QOL is being used to manage concentration
 }
