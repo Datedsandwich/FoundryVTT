@@ -80,9 +80,6 @@ if (args[0].tag === "OnUse") {
     }]);
 
     async function handleConcentration(effect) {
-        const casterToken = await fromUuid(args[0].tokenUuid);
-        const caster = casterToken.actor;
-
         if (caster.uuid !== effect.parent.uuid) return;
 
         const tokenUuid = await caster.getFlag("midi-qol", "moonbeam")
