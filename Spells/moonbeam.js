@@ -1,3 +1,4 @@
+// Requires Active Auras, Advanced Macros, Dynamic Active Effects, Item Macro, JB2A, Midi-QOL, Sequencer, and Warpgate
 if (args[0].tag === "OnUse") {
     const moonbeamIntro = `jb2a.moonbeam.01.intro.blue`;
     const moonbeamOutro = `jb2a.moonbeam.01.outro.blue`;

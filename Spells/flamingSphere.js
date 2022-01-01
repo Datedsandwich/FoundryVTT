@@ -1,3 +1,5 @@
+// Requires Active Auras, Advanced Macros, Dynamic Active Effects, Item Macro, Midi-QOL, and Warpgate
+
 if (args[0].tag === "OnUse") {
     const casterToken = await fromUuid(args[0].tokenUuid);
     const caster = casterToken.actor;
