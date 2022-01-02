@@ -50,8 +50,8 @@ if (args[0].tag === "OnUse") {
             },
             Item: {
                 [`${attack.data.name}`]: {
-                    "data.attackBonus": `${attackBonus - summonActor.data.data.abilities.str.mod}`, // Strength is always added to the attack, so we need to adjust
-                    "data.damage.parts": [[`1d10 + @mod + ${damageBonus}`, attack.data.data.damage.parts[0][1]]],
+                    "data.attackBonus": `${attackBonus - summonActor.data.data.abilities[`${attack.abilityMod}`].mod}`,
+                    "data.damage.parts": [[`${attack.data.data.damage.parts[0][0]} + ${damageBonus}`, attack.data.data.damage.parts[0][1]]],
                 }
             },
         }

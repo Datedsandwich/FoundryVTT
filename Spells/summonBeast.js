@@ -4,10 +4,11 @@ if (args[0].tag === "OnUse") {
     const summonMacro = game.macros.getName("Summon")
 
     const midi = args[0]
-
+    
     let summonOptions = { buttons: [
-        {label: "Avenger", value: "Avenger Celestial Spirit"},
-        {label: "Defender", value: "Defender Celestial Spirit"},
+        {label: "Air", value: "Air Bestial Spirit"},
+        {label: "Land", value: "Land Bestial Spirit"},
+        {label: "Water", value: "Water Bestial Spirit"}
     ] };
 
     const summonActorName = await warpgate.buttonDialog(summonOptions, 'row');
@@ -22,8 +23,8 @@ if (args[0].tag === "OnUse") {
     const caster = casterToken.actor;
 
     const spellLevel = midi.spellLevel
-    const hpBonus = 10 * (spellLevel - 5)
-    const acBonus = spellLevel // The Defender actor has a higher base AC
+    const hpBonus = 5 * (spellLevel - 2)
+    const acBonus = spellLevel
     const damageBonus = spellLevel
     const attackBonus = caster.data.data.attributes.spelldc - 8
 
