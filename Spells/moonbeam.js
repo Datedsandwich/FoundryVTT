@@ -46,7 +46,7 @@ if (args[0].tag === "OnUse") {
     };
 
     async function preEffects(template) {
-        new Sequence("Moonbeam")
+        new Sequence("Datedsandwich Macros")
             .effect()
             .file(moonbeamIntro)
             .atLocation(template)
