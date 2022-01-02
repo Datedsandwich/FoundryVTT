@@ -82,7 +82,6 @@ if (args[0].midi.tag === "OnUse") {
         "changes": [{ "key": "flags.dae.deleteUuid", "mode": 5, "value": summonedUuid, "priority": "30" }],
         "label": "Summon",
         "duration": { seconds: 60, rounds: 10 },
-        "origin": midi.itemUuid,
-        "icon": "icons/magic/earth/construct-stone.webp",
+        "origin": midi.itemUuid
     }]);
 }
