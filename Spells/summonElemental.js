@@ -1,3 +1,5 @@
+// Requires summon.js macro to be a macro in game called "Summon"
+
 if (args[0].tag === "OnUse") {
     const summonMacro = game.macros.getName("Summon")
 

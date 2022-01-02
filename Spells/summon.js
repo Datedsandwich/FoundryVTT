@@ -1,4 +1,4 @@
-// Requires Active Auras, Advanced Macros, Dynamic Active Effects, Item Macro, JB2A, Midi-QOL, Sequencer, and Warpgate
+// Requires Advanced Macros, Dynamic Active Effects, JB2A, Midi-QOL, Sequencer, and Warpgate
 
 if (args[0].midi.tag === "OnUse") {
     const magicSignIntro = `jb2a.magic_signs.circle.02.conjuration.intro.blue`;
