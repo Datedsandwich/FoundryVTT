@@ -29,7 +29,7 @@ if (args[0].tag === "OnUse") {
     const damageBonus = spellLevel
     const attackBonus = caster.data.data.attributes.spelldc - 8
 
-    const attack = summonActor.data.items.find((item) => { return item.data.data.damage.parts.length > 0 })
+    const attack = summonActor.data.items.find((item) => item.data.data.damage.parts.length > 0)
 
     const updates = {
         actor: {
