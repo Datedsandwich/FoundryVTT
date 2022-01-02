@@ -3,7 +3,15 @@ if (args[0].tag === "OnUse") {
 
     const midi = args[0]
 
-    const summonActorName = "Fire Elemental Spirit"
+    
+    let summonOptions = { buttons: [
+        {label: "Air", value: "Air Elemental Spirit"},
+        {label: "Earth", value: "Earth Elemental Spirit"},
+        {label: "Fire", value: "Fire Elemental Spirit"},
+        {label: "Water", value: "Water Elemental Spirit"},
+    ] };
+
+    const summonActorName = await warpgate.buttonDialog(summonOptions, 'row');
     const summonActor = game.actors.getName(summonActorName)
 
     if (!summonActor) {
@@ -14,7 +22,7 @@ if (args[0].tag === "OnUse") {
     const casterToken = await fromUuid(midi.tokenUuid);
     const caster = casterToken.actor;
 
-    const spellLevel = midi.itemLevel
+    const spellLevel = midi.spellLevel
     const hpBonus = 10 * (spellLevel - 4)
     const acBonus = spellLevel
     const damageBonus = spellLevel

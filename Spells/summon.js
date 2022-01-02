@@ -73,7 +73,7 @@ if (args[0].midi.tag === "OnUse") {
         },
     };
 
-    const summoned = await warpgate.spawn(summonActorName, { updates }, summonEffectCallbacks, { controllingActor: caster });
+    const summoned = await warpgate.spawn(summonActorName, updates, summonEffectCallbacks, { controllingActor: caster });
     if (summoned.length !== 1) return;
 
     const summonedUuid = `Scene.${canvas.scene.id}.Token.${summoned[0]}`;
