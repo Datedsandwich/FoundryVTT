@@ -30,13 +30,11 @@ if (args[0].tag === "OnUse") {
     const damageBonus = spellLevel
     const attackBonus = caster.data.data.attributes.spelldc - 8
 
+    const slamAttack = summonActor.data.items.find((item) => { return item.data.data.damage.parts.length > 0 })
+
     const updates = {
         actor: {
-            'data.attributes.hp': { value: summonActor.data.data.attributes.hp.max + hpBonus, max: summonActor.data.data.attributes.hp.max + hpBonus },
-            'data.bonuses.msak': { attack: `- @mod - @prof + ${attackBonus}`, damage: `${damageBonus}` },
-            'data.bonuses.mwak': { attack: `- @mod - @prof + ${attackBonus}`, damage: `${damageBonus}` },
-            'data.bonuses.rsak': { attack: `- @mod - @prof + ${attackBonus}`, damage: `${damageBonus}` },
-            'data.bonuses.rwak': { attack: `- @mod - @prof + ${attackBonus}`, damage: `${damageBonus}` }
+            'data.attributes.hp': { value: summonActor.data.data.attributes.hp.max + hpBonus, max: summonActor.data.data.attributes.hp.max + hpBonus }
         },
         embedded: {
             ActiveEffect: {
@@ -50,7 +48,13 @@ if (args[0].tag === "OnUse") {
                         "priority": 0
                     }]
                 }
-            }
+            },
+            Item: {
+                "Slam": {
+                    "data.attackBonus": `${attackBonus - summonActor.data.data.abilities.str.mod}`, // Strength is always added to the attack, so we need to adjust
+                    "data.damage.parts": [[`1d10 + @mod + ${damageBonus}`, slamAttack.data.data.damage.parts[0][1]]],
+                }
+            },
         }
     }
 
