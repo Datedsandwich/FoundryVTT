@@ -52,7 +52,6 @@ if (args[0].tag === "OnUse") {
             .atLocation(template)
             .belowTokens()
             .scale(0.25)
-            .waitUntilFinished(-1000)
             .zIndex(1)
             .center()
             .fadeIn(500)
@@ -66,17 +65,16 @@ if (args[0].tag === "OnUse") {
         }
     };
 
-    const summoned = await warpgate.spawn("Moonbeam", { embedded: updates }, summonEffectCallbacks, {});
+    const summoned = await warpgate.spawn("Moonbeam", { embedded: updates }, summonEffectCallbacks, { controllingActor: caster });
     if (summoned.length !== 1) return;
 
     const summonedUuid = `Scene.${canvas.scene.id}.Token.${summoned[0]}`;
     await caster.setFlag("midi-qol", "moonbeam", summonedUuid);
     await caster.createEmbeddedDocuments("ActiveEffect", [{
         "changes": [{ "key": "flags.dae.deleteUuid", "mode": 5, "value": summonedUuid, "priority": "30" }],
-        "label": "Moonbeam Summon",
+        "label": "Moonbeam",
         "duration": { seconds: 60, rounds: 10 },
-        "origin": args[0].itemUuid,
-        "icon": "systems/dnd5e/icons/spells/beam-blue-3.jpg",
+        "origin": args[0].itemUuid
     }]);
 
     async function handleConcentration(effect) {

@@ -1,6 +1,9 @@
 // Requires summon.js macro to be a macro in game called "Summon"
 
 if (args[0].tag === "OnUse") {
+    const magicSignIntro =  `jb2a.magic_signs.circle.02.conjuration.intro.yellow`
+    const magicSignOutro =  `jb2a.magic_signs.circle.02.conjuration.outro.yellow`
+
     const summonMacro = game.macros.getName("Summon")
 
     const midi = args[0]
@@ -61,6 +64,10 @@ if (args[0].tag === "OnUse") {
     }
 
     const scope = {
+        animation: {
+            magicSignIntro,
+            magicSignOutro
+        },
         midi,
         summon
     }
