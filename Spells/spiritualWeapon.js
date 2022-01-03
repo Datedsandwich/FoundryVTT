@@ -1,12 +1,17 @@
 // Requires Advanced Macros, Dynamic Active Effects, Item Macro, JB2A, Midi-QOL, Sequencer, and Warpgate
 if (args[0].tag === "OnUse") {
+    const summonMacro = game.macros.getName("Summon")
+
+    const midi = args[0]
+
     const magicSignIntro = `jb2a.magic_signs.circle.02.evocation.intro.blue`;
     const magicSignOutro = `jb2a.magic_signs.circle.02.evocation.outro.blue`;
 
     const casterToken = await fromUuid(args[0].tokenUuid);
     const caster = casterToken.actor;
 
-    const summonActor = game.actors.getName("Spiritual Weapon")
+    const summonActorName = "Spiritual Weapon"
+    const summonActor = game.actors.getName(summonActorName)
 
     if (!summonActor) {
         console.error("No Spiritual Weapon Actor");
@@ -29,43 +34,20 @@ if (args[0].tag === "OnUse") {
         }
     };
 
-    async function preEffects(template) {
-        new Sequence("Datedsandwich Macros")
-            .effect()
-            .file(magicSignIntro)
-            .atLocation(template)
-            .belowTokens()
-            .scale(0.25)
-            .play()
-
-        await warpgate.wait(2500);
+    const summon = {
+        duration: {seconds: 60, rounds: 10},
+        summonActorName,
+        updates
     }
 
-    async function postEffects(template, token) {
-        new Sequence("Datedsandwich Macros")
-            .effect()
-            .file(magicSignOutro)
-            .atLocation(template)
-            .belowTokens()
-            .scale(0.25)
-            .play()
-            
-        await warpgate.wait(500);
+    const scope = {
+        animation: {
+            magicSignIntro,
+            magicSignOutro
+        },
+        midi,
+        summon
     }
 
-    const summonEffectCallbacks = {
-        pre: preEffects,
-        post: postEffects,
-    };
-
-    const summoned = await warpgate.spawn("Spiritual Weapon", updates, summonEffectCallbacks, { controllingActor: caster });
-    if (summoned.length !== 1) return;
-
-    const summonedUuid = `Scene.${canvas.scene.id}.Token.${summoned[0]}`;
-    await caster.createEmbeddedDocuments("ActiveEffect", [{
-        "changes": [{ "key": "flags.dae.deleteUuid", "mode": 5, "value": summonedUuid, "priority": "30" }],
-        "label": "Spiritual Weapon",
-        "duration": { seconds: 60, rounds: 10 },
-        "origin": args[0].itemUuid
-    }]);
+    summonMacro.execute(scope)
 }
