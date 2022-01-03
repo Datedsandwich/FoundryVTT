@@ -59,6 +59,7 @@ if (args[0].tag === "OnUse") {
     }
 
     const summon = {
+        duration: {seconds: 3600, rounds: 600},
         summonActorName,
         updates
     }

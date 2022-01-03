@@ -1,7 +1,7 @@
 // Requires Advanced Macros, Dynamic Active Effects, JB2A, Midi-QOL, Sequencer, and Warpgate
 
 if (args[0].midi.tag === "OnUse") {
-    const { animation, midi, summon: { summonActorName, updates = {} } } = args[0]
+    const { animation, midi, summon: { duration, summonActorName, updates = {} } } = args[0]
 
     const magicSignIntro = animation?.magicSignIntro || `jb2a.magic_signs.circle.02.conjuration.intro.blue`
     const magicSignOutro = animation?.magicSignOutro || `jb2a.magic_signs.circle.02.conjuration.outro.blue`
@@ -54,7 +54,7 @@ if (args[0].midi.tag === "OnUse") {
     await caster.createEmbeddedDocuments("ActiveEffect", [{
         "changes": [{ "key": "flags.dae.deleteUuid", "mode": 5, "value": summonedUuid, "priority": "30" }],
         "label": "Summon",
-        "duration": { seconds: 60, rounds: 10 },
+        "duration": duration ? duration : { seconds: 60, rounds: 10 },
         "origin": midi.itemUuid
     }])
 }
