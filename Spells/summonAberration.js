@@ -1,6 +1,9 @@
 // Requires summon.js macro to be a macro in game called "Summon"
 
 if (args[0].tag === "OnUse") {
+    const magicSignIntro =  `jb2a.magic_signs.circle.02.conjuration.intro.purple`
+    const magicSignOutro =  `jb2a.magic_signs.circle.02.conjuration.outro.purple`
+
     const summonMacro = game.macros.getName("Summon")
 
     const midi = args[0]
@@ -30,7 +33,7 @@ if (args[0].tag === "OnUse") {
 
     const attack = summonActor.data.items.find((item) => item.data.data.damage.parts.length > 0)
 
-    const updates = {
+    let updates = {
         actor: {
             'data.attributes.hp': { value: summonActor.data.data.attributes.hp.max + hpBonus, max: summonActor.data.data.attributes.hp.max + hpBonus }
         },
@@ -56,6 +59,34 @@ if (args[0].tag === "OnUse") {
         }
     }
 
+    if(summonActorName === "Star Spawn Aberrant Spirit") {
+        const changeValue = `turn=start,saveDC=${caster.data.data.attributes.spelldc ?? 10},saveAbility=wis,damageRoll=2d6,damageType=psychic,saveRemove=false`;
+
+        updates.embedded.ActiveEffect = {
+            ...updates.embedded.ActiveEffect,
+            "Whispering Aura": {
+                "changes": [{ "key": "flags.midi-qol.OverTime", "mode": 5, "value": changeValue, "priority": "20" }],
+                "disabled": false,
+                "label": "Whispering Aura",
+                "icon": "icons/magic/control/fear-fright-white.webp",
+                "flags": {
+                    "ActiveAuras": {
+                        "isAura": true,
+                        "aura": "All",
+                        "radius": 5,
+                        "alignment": "",
+                        "type": "",
+                        "ignoreSelf": true,
+                        "height": true,
+                        "hidden": false,
+                        "hostile": false,
+                        "onlyOnce": false
+                    }
+                },
+            }
+        }
+    }
+
     const summon = {
         duration: {seconds: 3600, rounds: 600},
         summonActorName,
@@ -63,6 +94,10 @@ if (args[0].tag === "OnUse") {
     }
 
     const scope = {
+        animation: {
+            magicSignIntro,
+            magicSignOutro
+        },
         midi,
         summon
     }
