@@ -42,8 +42,8 @@ if (args[0].midi.tag === "OnUse") {
     }
 
     const summonEffectCallbacks = {
-        pre: preEffects,
-        post: postEffects,
+        pre: animation?.preEffects || preEffects,
+        post: animation?.postEffects || postEffects,
     }
 
     const summoned = await warpgate.spawn(summonActorName, updates, summonEffectCallbacks, { controllingActor: caster })
