@@ -51,7 +51,7 @@ if (args[0].tag === "OnUse") {
             .file(moonbeamIntro)
             .atLocation(template)
             .belowTokens()
-            .scale(0.25)
+            .scale(0.5)
             .zIndex(1)
             .center()
             .fadeIn(500)
@@ -91,9 +91,9 @@ if (args[0].tag === "OnUse") {
             .file(moonbeamOutro)
             .atLocation(token.object.transform)
             .playbackRate(2)
-            .offset({ x: -canvas.grid.size / 2, y: -canvas.grid.size / 2 }) // Token transform is top left of square
+            .offset({ x: -canvas.grid.size, y: -canvas.grid.size}) // Token transform is top left of square
             .belowTokens()
-            .scale(0.25)
+            .scale(0.5)
             .play()
 
 
