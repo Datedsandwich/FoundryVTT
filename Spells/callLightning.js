@@ -14,6 +14,8 @@ if (args[0].tag === "OnUse") {
     let isExistingStorm = await warpgate.buttonDialog(weatherDialogData, 'row');
 
     const damageDice = isExistingStorm ? args[0].spellLevel + 1 : args[0].spellLevel
+
+    const isInnate = args[0].item.data.preparation.mode === 'innate'
     
     const updates = {
         embedded: {
@@ -34,7 +36,7 @@ if (args[0].tag === "OnUse") {
                         },
                         "save": { "ability": "dex", "dc": caster.data.data.attributes.spelldc ?? 10, "scaling": "spell" },
                         "level": 0,
-                        "preparation": { "mode": 'cantrip', "prepared": true },
+                        "preparation": { "mode": isInnate ? 'innate' : 'cantrip', "prepared": true },
                         "range": { "value": null, "long": null, "units": "" },
                         "scaling": {
                             "mode": "none",
