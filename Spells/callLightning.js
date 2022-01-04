@@ -5,6 +5,15 @@ if (args[0].tag === "OnUse") {
     const caster = casterToken.actor;
 
     const deleteHook = "deleteActiveEffect"
+
+    const weatherDialogData = {
+        buttons: [{ label: "Yes", value: true }, { label: "No", value: false }],
+        title: "Is there an existing storm?"
+    };
+
+    let isExistingStorm = await warpgate.buttonDialog(weatherDialogData, 'row');
+
+    const damageDice = isExistingStorm ? args[0].spellLevel + 1 : args[0].spellLevel
     
     const updates = {
         embedded: {
@@ -20,7 +29,7 @@ if (args[0].tag === "OnUse") {
                         "actionType": "save",
                         "activation": { "type": "action", "cost": 1, "condition": "" },
                         "damage": {
-                            "parts": [[`${args[0].spellLevel}d10`, "lightning"]],
+                            "parts": [[`${damageDice}d10`, "lightning"]],
                             "versatile": ""
                         },
                         "save": { "ability": "dex", "dc": caster.data.data.attributes.spelldc ?? 10, "scaling": "spell" },
