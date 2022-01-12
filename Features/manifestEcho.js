@@ -1,7 +1,5 @@
 // Quick and dirty for Saturday's game
 if (args[0].tag === "OnUse") {
-    const summonMacro = game.macros.getName("Summon")
-
     const midi = args[0]
 
     const casterToken = await fromUuid(args[0].tokenUuid);
@@ -15,16 +13,33 @@ if (args[0].tag === "OnUse") {
         return;
     }
 
-    const summon = {
-        duration: {seconds: 600, rounds: 100},
-        summonActorName,
-        updates: {}
+    caster.effects.find(effect => effect.data.label === 'Manifested Echo')?.delete()
+
+    async function preEffects(template) {
+        new Sequence("Datedsandwich Macros")
+            .effect()
+            .file('jb2a.explosion.01.purple')
+            .atLocation(template)
+            .scale(0.5)
+            .play()
+
+        await warpgate.wait(400)
     }
 
-    const scope = {
-        midi,
-        summon
+    const summonEffectCallbacks = {
+        pre: preEffects
     }
 
-    summonMacro.execute(scope)
+    const summoned = await warpgate.spawn(summonActorName, {}, summonEffectCallbacks, { controllingActor: caster })
+    if (summoned.length !== 1) return
+
+    const summonedUuid = `Scene.${canvas.scene.id}.Token.${summoned[0]}`
+
+    await caster.createEmbeddedDocuments("ActiveEffect", [{
+        "changes": [{ "key": "flags.dae.deleteUuid", "mode": 5, "value": summonedUuid, "priority": "30" }],
+        "label": "Manifested Echo",
+        "duration": {seconds: 600, rounds: 100},
+        "origin": midi.itemUuid,
+        "flags.dae.stackable": false
+    }])
 }
