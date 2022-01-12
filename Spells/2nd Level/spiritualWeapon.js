@@ -1,7 +1,5 @@
 // Requires Advanced Macros, Dynamic Active Effects, Item Macro, JB2A, Midi-QOL, Sequencer, and Warpgate
 if (args[0].tag === "OnUse") {
-    const summonMacro = game.macros.getName("Summon")
-
     const midi = args[0]
 
     const magicSignIntro = `jb2a.magic_signs.circle.02.evocation.intro.blue`;
@@ -17,6 +15,8 @@ if (args[0].tag === "OnUse") {
         console.error("No Spiritual Weapon Actor");
         return;
     }
+
+    caster.effects.find(effect => effect.data.label === 'Spiritual Weapon')?.delete()
 
     const attackBonus = caster.data.data.attributes.spelldc - 8
     const damageBonus = caster.data.data.abilities[caster.data.data.attributes.spellcasting].mod
@@ -34,20 +34,46 @@ if (args[0].tag === "OnUse") {
         }
     };
 
-    const summon = {
-        duration: {seconds: 60, rounds: 10},
-        summonActorName,
-        updates
+    async function preEffects(template) {
+        new Sequence("Datedsandwich Macros")
+            .effect()
+            .file(magicSignIntro)
+            .atLocation(template)
+            .belowTokens()
+            .scale(0.25)
+            .play()
+
+        await warpgate.wait(2500)
     }
 
-    const scope = {
-        animation: {
-            magicSignIntro,
-            magicSignOutro
-        },
-        midi,
-        summon
+    async function postEffects(template) {
+        new Sequence("Datedsandwich Macros")
+            .effect()
+            .file(magicSignOutro)
+            .atLocation(template)
+            .belowTokens()
+            .scale(0.25)
+            .thenDo(async () => {
+                await Sequencer.EffectManager.endEffects({ name: "magicSignLoop" })
+            })
+            .play()
     }
 
-    summonMacro.execute(scope)
+    const summonEffectCallbacks = {
+        pre: preEffects,
+        post: postEffects
+    }
+
+    const summoned = await warpgate.spawn(summonActorName, updates, summonEffectCallbacks, { controllingActor: caster })
+    if (summoned.length !== 1) return
+
+    const summonedUuid = `Scene.${canvas.scene.id}.Token.${summoned[0]}`
+
+    await caster.createEmbeddedDocuments("ActiveEffect", [{
+        "changes": [{ "key": "flags.dae.deleteUuid", "mode": 5, "value": summonedUuid, "priority": "30" }],
+        "label": "Spiritual Weapon",
+        "duration": { seconds: 60, rounds: 10 },
+        "origin": midi.itemUuid,
+        "flags.dae.stackable": false
+    }])
 }
