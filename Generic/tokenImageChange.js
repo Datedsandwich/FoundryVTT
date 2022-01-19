@@ -1,5 +1,4 @@
-const originalImage = args[1]
-const newImage = args[2]
+const newImage = args[1]
 const lastArg = args[args.length - 1]
 
 if (args[0] === 'on') {
