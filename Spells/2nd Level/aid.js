@@ -4,6 +4,6 @@ if (args[0].tag === "OnUse") {
     const hpBonus = 5 * (args[0].spellLevel - 1)
 
     args[0].hitTargets.forEach(async target => {
-        await target.actor.update({ "data.attributes.hp.value": target.actor.data.data.attributes.hp.value + hpBonus });
+        await target.actor.applyDamage(-hpBonus)
     })
 }
