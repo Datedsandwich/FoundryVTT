@@ -1,11 +1,11 @@
 if (args[0].tag === 'OnUse') {
-    if (args[0].failedSaves.length === 0) return;
+    if(args[0].failedSaves.length === 0) return
 
     const casterToken = await fromUuid(args[0].tokenUuid)
     const caster = casterToken.actor
 
     const itemData = {
-        name: 'Whirlwind',
+        name: 'Whirlwind Strength Save',
         type: 'weapon',
         effects: [],
         data: {
@@ -22,33 +22,9 @@ if (args[0].tag === 'OnUse') {
 
     const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: args[0].failedSaveUuids };
     const strengthSaves = await MidiQOL.completeItemRoll(item, options);
-    console.log("return is ", strengthSaves)
 
     strengthSaves.failedSaves.forEach(async target => {
-        const updates = {
-            elevation: target.data.elevation + 10
-        }
-
-        await target.data.update(updates)
-
         const restrained = await game.dfreds.effectInterface.hasEffectApplied('Restrained', target.actor.uuid)
-        if (!restrained) {
-            game.dfreds.effectInterface.toggleEffect('Restrained', { uuids: [target.actor.uuid] });
-        }
-    })
-
-    const failedSaveUuids = [...strengthSaves.failedSaves].map(target => target.document.uuid)
-    const successfulSaves = [...strengthSaves.saves].filter(target => !failedSaveUuids.includes(target.document.uuid))
-
-    successfulSaves.forEach(async target => {
-        const updates = {
-            elevation: 0
-        }
-
-        await target.update(updates)
-
-        if (restrained) {
-            game.dfreds.effectInterface.toggleEffect('Restrained', { uuids: [target.actor.uuid] });
-        }
+        !restrained && game.dfreds.effectInterface.toggleEffect('Restrained', { uuids: [target.actor.uuid] });
     })
 }
