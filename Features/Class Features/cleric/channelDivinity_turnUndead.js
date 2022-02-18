@@ -43,15 +43,13 @@ if (args[0].tag === "OnUse") {
     const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: undeadTargetUuids };
     const turnUndeadSave = await MidiQOL.completeItemRoll(item, options);
 
-    turnUndeadSave.failedSaves.forEach(async target => {
-        const isTurned = await game.dfreds.effectInterface.hasEffectApplied('Channel Divinity: Turn Undead', target.actor.uuid)
-        !isTurned && game.dfreds.effectInterface.toggleEffect('Channel Divinity: Turn Undead', { uuids: [target.actor.uuid] });
-
+    turnUndeadSave.failedSaves.forEach(target => {
         const cr = target.actor.data.data.details?.cr
 
         if (cr <= destroyCR) {
-            const currentHp = target.actor.data.data.attributes?.hp?.value
-            target.actor.applyDamage(currentHp)
+            game.dfreds.effectInterface.addEffect({ effectName: 'Dead', uuid: target.actor.uuid, overlay: true });
+        } else {
+            game.dfreds.effectInterface.addEffect({ effectName: 'Channel Divinity: Turn Undead', uuid: target.actor.uuid });
         }
     })
 }
