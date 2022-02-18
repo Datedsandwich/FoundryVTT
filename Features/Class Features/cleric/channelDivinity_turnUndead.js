@@ -1,4 +1,5 @@
 // Requires Advanced Macros, DFred's Convenient Effects, Item Macro, Midi-QOL
+// Remove the saving throw from the item, let the Macro handle it
 if (args[0].tag === "OnUse") {
     if (args[0].hitTargets.length === 0) return
 
