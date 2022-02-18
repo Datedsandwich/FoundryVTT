@@ -1,3 +1,4 @@
+// Requires Advanced Macros, DFred's Convenient Effects, Item Macro, Midi-QOL
 if (args[0].tag === "OnUse") {
     if (args[0].hitTargets.length === 0) return
 
