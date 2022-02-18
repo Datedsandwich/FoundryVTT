@@ -51,7 +51,7 @@ if (args[0].tag === "OnUse") {
 
         if (cr <= destroyCR) {
             const currentHp = target.actor.data.data.attributes?.hp?.value
-            target.applyDamage(currentHp)
+            target.actor.applyDamage(currentHp)
         }
     })
 }
