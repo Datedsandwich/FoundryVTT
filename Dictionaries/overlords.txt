@@ -1,3 +1,5 @@
+Ashtakala,
+Ashurak,
 Bel Shalor,
 Dral Khalatesh,
 Dral Khatur,
@@ -12,4 +14,4 @@ Surash Ka,
 Tol Kharash,
 Tul Oreshka,
 Val Gultesh,
-Yad Rhaghesh
+Yad Raghesh
