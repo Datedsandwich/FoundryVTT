@@ -6,7 +6,7 @@ if (args[0].tag === "OnUse") {
 
     canvas.scene.deleteEmbeddedDocuments("MeasuredTemplate", [template.id])
 
-    const offset = sourceToken.data.width/2 + canvas.grid.size
+    const offset = sourceToken.data.width/2 * canvas.grid.size
 
     new Sequence().effect()
         .file('modules/jb2a_patreon/Library/Cantrip/Sacred_Flame/SacredFlameSource_01_Regular_Yellow_400x400.webm')
