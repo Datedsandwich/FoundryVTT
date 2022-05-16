@@ -6,7 +6,7 @@ if (args[0].tag === "OnUse") {
 
     canvas.scene.deleteEmbeddedDocuments("MeasuredTemplate", [template.id])
 
-    const offset = sourceToken.data.width/2 * canvas.grid.size
+    const offset = sourceToken.data.width / 2 * canvas.grid.size
 
     new Sequence().effect()
         .file('modules/jb2a_patreon/Library/Cantrip/Sacred_Flame/SacredFlameSource_01_Regular_Yellow_400x400.webm')
@@ -19,12 +19,10 @@ if (args[0].tag === "OnUse") {
         .on(sourceToken)
         .opacity(0)
         .fadeOut(500)
-        .teleportTo({ x: centerPosition[0] - offset, y: centerPosition[1] - offset })
-        .snapToGrid(false)
+        .teleportTo({ x: centerPosition[0], y: centerPosition[1] }, { relativeToCenter: true })
         .effect()
         .file('modules/jb2a_patreon/Library/Cantrip/Sacred_Flame/SacredFlameTarget_01_Regular_Yellow_400x400.webm')
         .atLocation({ x: centerPosition[0], y: centerPosition[1] })
-        .snapToGrid(false)
         .scale(2)
         .randomRotation()
         .playbackRate(2)
