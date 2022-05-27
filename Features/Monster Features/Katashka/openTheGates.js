@@ -1,4 +1,4 @@
-if (args[0].tag === "OnUse") {
+if (args[0].tag === 'OnUse') {
     const casterToken = await fromUuid(args[0].tokenUuid)
     const caster = casterToken.actor
 
@@ -6,33 +6,33 @@ if (args[0].tag === "OnUse") {
 
     let summonOptions = {
         buttons: [
-            { label: "Boneclaws", value: "Boneclaw" },
-            { label: "Dragon Zombies", value: "Dragon Zombie" },
-            { label: "Skeletal Juggernauts", value: "Skeletal Juggernaut" },
-            { label: "Wraiths", value: "Wraith" }
-        ]
-    };
+            { label: 'Boneclaws', value: 'Boneclaw' },
+            { label: 'Dragon Zombies', value: 'Dragon Zombie' },
+            { label: 'Skeletal Juggernauts', value: 'Skeletal Juggernaut' },
+            { label: 'Wraiths', value: 'Wraith' },
+        ],
+    }
 
     const summons = {
-        'Boneclaw': {
+        Boneclaw: {
             number: 2,
-            scale: 0.75
+            scale: 0.75,
         },
         'Dragon Zombie': {
             number: 2,
-            scale: 1
+            scale: 1,
         },
         'Skeletal Juggernaut': {
             number: 6,
-            scale: 0.75
+            scale: 0.75,
         },
-        'Wraith': {
+        Wraith: {
             number: 4,
-            scale: 0.5
-        }
+            scale: 0.5,
+        },
     }
 
-    const summonActorName = await warpgate.buttonDialog(summonOptions, 'column');
+    const summonActorName = await warpgate.buttonDialog(summonOptions, 'column')
     const summonActor = game.actors.getName(summonActorName)
 
     if (!summonActor) {
@@ -43,7 +43,7 @@ if (args[0].tag === "OnUse") {
     async function preEffects(template) {
         const scale = summons[summonActorName].scale
 
-        new Sequence("Datedsandwich Macros")
+        new Sequence('Datedsandwich Macros')
             .effect()
             .file('jb2a.toll_the_dead.green.skull_smoke')
             .atLocation(template)
@@ -52,7 +52,8 @@ if (args[0].tag === "OnUse") {
     }
 
     async function postEffects(template, token) {
-        new Sequence("Datedsandwich Macros").animation()
+        new Sequence('Datedsandwich Macros')
+            .animation()
             .on(token)
             .fadeIn(500)
             .play()

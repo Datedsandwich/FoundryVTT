@@ -1,6 +1,6 @@
 // Requires Advanced Macros, DFred's Convenient Effects, Item Macro, Midi-QOL
 // Remove the saving throw from the item, let the Macro handle it
-if (args[0].tag === "OnUse") {
+if (args[0].tag === 'OnUse') {
     if (args[0].hitTargets.length === 0) return
 
     const casterToken = await fromUuid(args[0].tokenUuid)
@@ -24,7 +24,13 @@ if (args[0].tag === "OnUse") {
     const clericLevels = caster.classes?.cleric?.levels
     const destroyCR = getDestroyUndeadCR(clericLevels)
 
-    const undeadTargetUuids = args[0].hitTargets.filter(target => (target.actor.data.data.details?.type?.value || '').toLowerCase().includes('undead')).map(target => target.uuid)
+    const undeadTargetUuids = args[0].hitTargets
+        .filter((target) =>
+            (target.actor.data.data.details?.type?.value || '')
+                .toLowerCase()
+                .includes('undead')
+        )
+        .map((target) => target.uuid)
 
     const itemData = {
         name: 'Channel Divinity Wisdom Save',
@@ -32,26 +38,50 @@ if (args[0].tag === "OnUse") {
         effects: [],
         data: {
             actionType: 'save',
-            save: { dc: caster.data.data.attributes?.spelldc ?? 10, ability: 'wis', scaling: 'flat' },
+            save: {
+                dc: caster.data.data.attributes?.spelldc ?? 10,
+                ability: 'wis',
+                scaling: 'flat',
+            },
             damage: { parts: [] },
-            components: { concentration: false, material: false, ritual: false, somatic: false, value: '', vocal: false },
+            components: {
+                concentration: false,
+                material: false,
+                ritual: false,
+                somatic: false,
+                value: '',
+                vocal: false,
+            },
             duration: { units: 'inst', value: undefined },
-            weaponType: 'improv'
-        }
+            weaponType: 'improv',
+        },
     }
 
     const item = new CONFIG.Item.documentClass(itemData, { parent: caster })
 
-    const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: undeadTargetUuids };
-    const turnUndeadSave = await MidiQOL.completeItemRoll(item, options);
+    const options = {
+        showFullCard: false,
+        createWorkflow: true,
+        versatile: false,
+        configureDialog: false,
+        targetUuids: undeadTargetUuids,
+    }
+    const turnUndeadSave = await MidiQOL.completeItemRoll(item, options)
 
-    turnUndeadSave.failedSaves.forEach(target => {
+    turnUndeadSave.failedSaves.forEach((target) => {
         const cr = target.actor.data.data.details?.cr
 
         if (cr <= destroyCR) {
-            game.dfreds.effectInterface.addEffect({ effectName: 'Dead', uuid: target.actor.uuid, overlay: true });
+            game.dfreds.effectInterface.addEffect({
+                effectName: 'Dead',
+                uuid: target.actor.uuid,
+                overlay: true,
+            })
         } else {
-            game.dfreds.effectInterface.addEffect({ effectName: 'Channel Divinity: Turn Undead', uuid: target.actor.uuid });
+            game.dfreds.effectInterface.addEffect({
+                effectName: 'Channel Divinity: Turn Undead',
+                uuid: target.actor.uuid,
+            })
         }
     })
 }
