@@ -20,23 +20,19 @@ if (args[0].tag === 'OnUse') {
         .find((effect) => effect.data.label === 'Spiritual Weapon')
         ?.delete()
 
-    const attackBonus = caster.data.data.attributes.spelldc - 8
+    const attackBonus = caster.system.attributes.spelldc - 8
     const damageBonus =
-        caster.data.data.abilities[caster.data.data.attributes.spellcasting].mod
+        caster.system.abilities[caster.system.attributes.spellcasting].mod
 
     const attack = summonActor.data.items.find(
-        (item) => item.data.data.damage.parts.length > 0
+        (item) => item.system.damage.parts.length > 0
     )
 
     const updates = {
         embedded: {
             Item: {
                 'Spiritual Weapon Damage': {
-                    'data.attackBonus': `${
-                        attackBonus -
-                        summonActor.data.data.abilities[`${attack.abilityMod}`]
-                            .mod
-                    }`,
+                    'data.attackBonus': `${attackBonus}`,
                     'data.damage.parts': [
                         [
                             `${Math.floor(

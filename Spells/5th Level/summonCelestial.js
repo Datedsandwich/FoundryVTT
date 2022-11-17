@@ -30,17 +30,17 @@ if (args[0].tag === 'OnUse') {
     const hpBonus = 10 * (spellLevel - 5)
     const acBonus = spellLevel // The Defender actor has a higher base AC
     const damageBonus = spellLevel
-    const attackBonus = caster.data.data.attributes.spelldc - 8
+    const attackBonus = caster.system.attributes.spelldc - 8
 
     const attack = summonActor.data.items.find(
-        (item) => item.data.data.damage.parts.length > 0
+        (item) => item.system.damage.parts.length > 0
     )
 
     const updates = {
         actor: {
             'data.attributes.hp': {
-                value: summonActor.data.data.attributes.hp.max + hpBonus,
-                max: summonActor.data.data.attributes.hp.max + hpBonus,
+                value: summonActor.system.attributes.hp.max + hpBonus,
+                max: summonActor.system.attributes.hp.max + hpBonus,
             },
         },
         embedded: {
@@ -62,13 +62,13 @@ if (args[0].tag === 'OnUse') {
                 [`${attack.data.name}`]: {
                     'data.attackBonus': `${
                         attackBonus -
-                        summonActor.data.data.abilities[`${attack.abilityMod}`]
+                        summonActor.system.abilities[`${attack.system.ability}`]
                             .mod
                     }`,
                     'data.damage.parts': [
                         [
-                            `${attack.data.data.damage.parts[0][0]} + ${damageBonus}`,
-                            attack.data.data.damage.parts[0][1],
+                            `${attack.system.damage.parts[0][0]} + ${damageBonus}`,
+                            attack.system.damage.parts[0][1],
                         ],
                     ],
                 },
