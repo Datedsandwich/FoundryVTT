@@ -6,29 +6,27 @@ if (args[0].tag === 'OnUse') {
     const casterToken = await fromUuid(args[0].tokenUuid)
     const caster = casterToken.actor
 
-    function getDestroyUndeadCR(clericLevels) {
-        switch (clericLevels) {
-            case clericLevels >= 5 && clericLevels < 8:
-                return 0.5
-            case clericLevels >= 8 && clericLevels < 11:
-                return 1
-            case clericLevels >= 11 && clericLevels < 11:
-                return 2
-            case clericLevels >= 11 && clericLevels < 14:
-                return 3
-            case clericLevels >= 17:
-                return 4
-        }
-    }
-
-    const clericLevels = caster.classes?.cleric?.levels
-    const destroyCR = getDestroyUndeadCR(clericLevels)
+    const clericLevels = caster.classes?.cleric?.system?.levels
+    const destroyCR =
+        clericLevels >= 5 && clericLevels < 8
+            ? 0.5
+            : clericLevels >= 8 && clericLevels < 11
+            ? 1
+            : clericLevels >= 11 && clericLevels < 11
+            ? 2
+            : clericLevels >= 11 && clericLevels < 14
+            ? 3
+            : clericLevels >= 17
+            ? 4
+            : 0
 
     const undeadTargetUuids = args[0].hitTargets
-        .filter((target) =>
-            (target.actor.data.data.details?.type?.value || '')
-                .toLowerCase()
-                .includes('undead')
+        .filter(
+            (target) =>
+                (target.actor.system.details?.type?.value || '')
+                    .toLowerCase()
+                    .includes('undead') &&
+                !target.actor.flags?.datedsandwich?.turnImmunity
         )
         .map((target) => target.uuid)
 
@@ -39,7 +37,7 @@ if (args[0].tag === 'OnUse') {
         data: {
             actionType: 'save',
             save: {
-                dc: caster.data.data.attributes?.spelldc ?? 10,
+                dc: caster.system.attributes?.spelldc ?? 10,
                 ability: 'wis',
                 scaling: 'flat',
             },
@@ -66,10 +64,10 @@ if (args[0].tag === 'OnUse') {
         configureDialog: false,
         targetUuids: undeadTargetUuids,
     }
-    const turnUndeadSave = await MidiQOL.completeItemRoll(item, options)
+    const turnUndeadSave = await MidiQOL.completeItemUse(item, {}, options)
 
     turnUndeadSave.failedSaves.forEach((target) => {
-        const cr = target.actor.data.data.details?.cr
+        const cr = target.actor.system.details?.cr
 
         if (cr <= destroyCR) {
             game.dfreds.effectInterface.addEffect({
