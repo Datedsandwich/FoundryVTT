@@ -34,8 +34,6 @@ if (args[0].tag === 'OnUse') {
         (item) => item.system.damage.parts.length > 0
     )
 
-    console.log(attack)
-
     const updates = {
         actor: {
             'data.attributes.hp': {

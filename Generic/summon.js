@@ -4,8 +4,15 @@ if (args[0].midi.tag === 'OnUse') {
     const {
         animation,
         midi,
-        summon: { duration, summonActorName, updates = {} },
+        summon: {
+            duration = { seconds: 60, rounds: 10 },
+            summonActorName,
+            updates = {},
+        },
     } = args[0]
+
+    const actor = midi.actor
+    const origin = midi.itemUuid
 
     const magicSignIntro =
         animation?.magicSignIntro ||
@@ -64,21 +71,37 @@ if (args[0].midi.tag === 'OnUse') {
     )
     if (summoned.length !== 1) return
 
-    const summonedUuid = `Scene.${canvas.scene.id}.Token.${summoned[0]}`
+    const createdToken = game.canvas.tokens.get(summoned[0])
+    const summonedUuid = createdToken.document.uuid
 
-    await caster.createEmbeddedDocuments('ActiveEffect', [
+    const effects = await actor.createEmbeddedDocuments('ActiveEffect', [
         {
+            label: 'Summon',
+            icon: midi.item.img,
+            origin,
+            duration,
+            'flags.dae.stackable': false,
             changes: [
                 {
                     key: 'flags.dae.deleteUuid',
-                    mode: 5,
+                    mode: CONST.ACTIVE_EFFECT_MODES.ADD,
                     value: summonedUuid,
-                    priority: '30',
+                    priority: 30,
                 },
             ],
-            label: 'Summon',
-            duration: duration ? duration : { seconds: 60, rounds: 10 },
-            origin: midi.itemUuid,
         },
     ])
+
+    const effectUuids = effects.map((effect) => effect.uuid)
+
+    const removeUuids = [
+        ...getProperty(
+            actor.data.flags,
+            'midi-qol.concentration-data.removeUuids'
+        ),
+        ...effectUuids,
+    ]
+
+    if (removeUuids.length > 0)
+        actor.setFlag('midi-qol', 'concentration-data.removeUuids', removeUuids)
 }
