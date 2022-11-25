@@ -14,7 +14,7 @@ if (args[0].tag === 'OnUse') {
     }
 
     const changeValue = `turn=start,saveDC=${
-        caster.data.data.attributes.spelldc ?? 10
+        caster.system.attributes.spelldc ?? 10
     },saveAbility=con,damageRoll=${
         args[0].spellLevel
     }d10,damageType=radiant,saveDamage=halfdamage,saveRemove=false`
@@ -22,7 +22,7 @@ if (args[0].tag === 'OnUse') {
         Item: {
             'Moonbeam Damage': {
                 'data.damage.parts': [[`${args[0].spellLevel}d10`, 'radiant']],
-                'data.save.dc': caster.data.data.attributes.spelldc,
+                'data.save.dc': caster.system.attributes.spelldc,
             },
         },
         ActiveEffect: {
@@ -82,25 +82,43 @@ if (args[0].tag === 'OnUse') {
         summonEffectCallbacks,
         { controllingActor: caster }
     )
+
     if (summoned.length !== 1) return
 
-    const summonedUuid = `Scene.${canvas.scene.id}.Token.${summoned[0]}`
+    const summonedUuid = canvas.scene.tokens.get(summoned[0]).uuid
     await caster.setFlag('midi-qol', 'moonbeam', summonedUuid)
-    await caster.createEmbeddedDocuments('ActiveEffect', [
+
+    const effects = await caster.createEmbeddedDocuments('ActiveEffect', [
         {
             changes: [
                 {
                     key: 'flags.dae.deleteUuid',
-                    mode: 5,
+                    mode: CONST.ACTIVE_EFFECT_MODES.ADD,
                     value: summonedUuid,
-                    priority: '30',
+                    priority: 30,
                 },
             ],
             label: 'Moonbeam',
             duration: { seconds: 60, rounds: 10 },
             origin: args[0].itemUuid,
+            'flags.dae.stackable': false,
         },
     ])
+
+    const effectUuids = effects.map((effect) => effect.uuid)
+
+    const removeUuids = [
+        ...getProperty(
+            actor.data.flags,
+            'midi-qol.concentration-data.removeUuids'
+        ),
+        ...effectUuids,
+    ]
+
+    console.log(removeUuids)
+
+    if (removeUuids.length > 0)
+        actor.setFlag('midi-qol', 'concentration-data.removeUuids', removeUuids)
 
     async function handleConcentration(effect) {
         if (caster.uuid !== effect.parent.uuid) return
@@ -114,14 +132,19 @@ if (args[0].tag === 'OnUse') {
         new Sequence('Moonbeam')
             .effect()
             .file(moonbeamOutro)
-            .atLocation(token.object.transform)
+            .atLocation(token.object.transform, {
+                offset: {
+                    x: canvas.grid.size,
+                    y: canvas.grid.size,
+                },
+            })
             .playbackRate(2)
-            .offset({ x: -canvas.grid.size, y: -canvas.grid.size }) // Token transform is top left of square
             .belowTokens()
             .scale(0.5)
             .play()
 
         await caster.unsetFlag('midi-qol', 'moonbeam')
+
         Hooks.off(deleteHook, handleConcentration)
     }
 

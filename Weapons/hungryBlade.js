@@ -38,7 +38,7 @@ if (args[0].tag === 'OnUse') {
     if (!classItem) return
 
     await classItem.update({
-        'data.hitDiceUsed': classItem.data.data.hitDiceUsed + 1,
+        'data.hitDiceUsed': classItem.system.hitDiceUsed + 1,
     })
 
     const target = await fromUuid(args[0].hitTargetUuids[0] ?? '')

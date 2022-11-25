@@ -11,7 +11,7 @@ try {
         }
 
         const changeValue = `turn=end,saveDC=${
-            caster.data.data.attributes.spelldc ?? 10
+            caster.system.attributes.spelldc ?? 10
         },saveAbility=wis,damageRoll=${
             args[0].spellLevel
         }d8,damageType=psychic,saveDamage=halfdamage,saveRemove=false`
@@ -20,7 +20,7 @@ try {
             Item: {
                 'Maddening Darkness Damage': {
                     'data.damage.parts': [[`${args[0].spellLevel}d6`, 'fire']],
-                    'data.save.dc': caster.data.data.attributes.spelldc,
+                    'data.save.dc': caster.system.attributes.spelldc,
                 },
             },
             ActiveEffect: {
@@ -36,6 +36,7 @@ try {
                     disabled: false,
                     label: 'Maddening Darkness Damage',
                     icon: 'icons/magic/unholy/silhouette-robe-evil-glow.webp',
+                    origin: args[0].itemUuid,
                     flags: {
                         ActiveAuras: {
                             isAura: true,

@@ -41,7 +41,7 @@ if (args[0].tag === 'OnUse') {
                         },
                         save: {
                             ability: 'dex',
-                            dc: caster.data.data.attributes.spelldc ?? 10,
+                            dc: caster.system.attributes.spelldc ?? 10,
                             scaling: 'spell',
                         },
                         level: 0,

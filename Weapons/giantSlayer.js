@@ -5,7 +5,7 @@ if (args[0].tag === 'OnUse') {
     const source = sourceToken.actor
     const target = canvas.tokens.get(args[0].hitTargets[0].id)
 
-    const isGiant = (target.actor.data.data.details?.type?.value || '')
+    const isGiant = (target.actor.system.details?.type?.value || '')
         .toLowerCase()
         .includes('giant')
 

@@ -5,7 +5,7 @@ if (args[0].tag === 'OnUse') {
     const source = sourceToken.actor
     const target = canvas.tokens.get(args[0].hitTargets[0].id)
 
-    const isDragon = (target.actor.data.data.details?.type?.value || '')
+    const isDragon = (target.actor.system.details?.type?.value || '')
         .toLowerCase()
         .includes('dragon')
 

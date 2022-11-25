@@ -7,7 +7,7 @@ if (args[0].tag === 'OnUse') {
     async function applyDivineWord(target) {
         if (
             ['celestial', 'elemental', 'fey', 'fiend'].some((type) =>
-                (target.actor.data.data.details?.type?.value || '')
+                (target.actor.system.details?.type?.value || '')
                     .toLowerCase()
                     .includes(type)
             )
@@ -15,7 +15,7 @@ if (args[0].tag === 'OnUse') {
             target.object.toggleVisibility()
         }
 
-        const targetHp = target.actor.data.data.attributes.hp.value
+        const targetHp = target.actor.system.attributes.hp.value
 
         if (targetHp <= 20) {
             await target.actor.update({ 'data.attributes.hp.value': 0 })

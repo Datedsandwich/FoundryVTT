@@ -8,7 +8,7 @@ if (args[0].tag === 'OnUse') {
     const target = canvas.tokens.get(args[0].hitTargets[0].id)
 
     const isFiendOrUndead = ['fiend', 'undead'].some((type) =>
-        (target.actor.data.data.details?.type?.value || '')
+        (target.actor.system.details?.type?.value || '')
             .toLowerCase()
             .includes(type)
     )
