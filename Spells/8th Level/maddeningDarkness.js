@@ -3,28 +3,28 @@ try {
     if (args[0].tag === 'OnUse') {
         const casterToken = await fromUuid(args[0].tokenUuid)
         const caster = casterToken.actor
-        let sphereActor = game.actors.getName('Flaming Sphere')
+        let spellActor = game.actors.getName('Maddening Darkness')
 
-        if (!sphereActor) {
-            console.error('No Flaming Sphere')
+        if (!spellActor) {
+            console.error('No Maddening Darkness Actor')
             return
         }
 
         const changeValue = `turn=end,saveDC=${
             caster.data.data.attributes.spelldc ?? 10
-        },saveAbility=dex,damageRoll=${
+        },saveAbility=wis,damageRoll=${
             args[0].spellLevel
-        }d6,damageType=fire,saveDamage=halfdamage,saveRemove=false`
+        }d8,damageType=psychic,saveDamage=halfdamage,saveRemove=false`
 
         const updates = {
             Item: {
-                'Flaming Sphere Damage': {
+                'Maddening Darkness Damage': {
                     'data.damage.parts': [[`${args[0].spellLevel}d6`, 'fire']],
                     'data.save.dc': caster.data.data.attributes.spelldc,
                 },
             },
             ActiveEffect: {
-                'Flaming Sphere Damage': {
+                'Maddening Darkness Damage': {
                     changes: [
                         {
                             key: 'flags.midi-qol.OverTime',
@@ -34,13 +34,13 @@ try {
                         },
                     ],
                     disabled: false,
-                    label: 'Flaming Sphere Damage',
-                    icon: 'icons/magic/fire/orb-vortex.webp',
+                    label: 'Maddening Darkness Damage',
+                    icon: 'icons/magic/unholy/silhouette-robe-evil-glow.webp',
                     flags: {
                         ActiveAuras: {
                             isAura: true,
                             aura: 'All',
-                            radius: 7.5,
+                            radius: 60,
                             alignment: '',
                             type: '',
                             ignoreSelf: true,
@@ -55,7 +55,7 @@ try {
         }
 
         const summoned = await warpgate.spawn(
-            'Flaming Sphere',
+            'Maddening Darkness',
             { embedded: updates },
             {},
             {}
@@ -75,11 +75,11 @@ try {
                         priority: 30,
                     },
                 ],
-                label: 'Flaming Sphere Summon',
-                duration: { seconds: 60, rounds: 10 },
+                label: 'Maddening Darkness Summon',
+                duration: { seconds: 600, rounds: 100 },
                 origin: args[0].itemUuid,
                 'flags.dae.stackable': false,
-                icon: 'icons/magic/fire/orb-vortex.webp',
+                icon: 'icons/magic/unholy/silhouette-robe-evil-glow.webp',
             },
         ])
 
@@ -101,5 +101,8 @@ try {
             )
     }
 } catch (err) {
-    console.error(`${args[0].itemData.name} - Flaming Sphere ${version}`, err)
+    console.error(
+        `${args[0].itemData.name} - Maddening Darkness ${version}`,
+        err
+    )
 }
