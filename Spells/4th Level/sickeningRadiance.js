@@ -3,30 +3,30 @@ try {
     if (args[0].tag === 'OnUse') {
         const casterToken = await fromUuid(args[0].tokenUuid)
         const caster = casterToken.actor
-        let spellActor = game.actors.getName('Maddening Darkness')
+        let spellActor = game.actors.getName('Sickening Radiance')
 
         if (!spellActor) {
-            console.error('No Maddening Darkness Actor')
+            console.error('No Sickening Radiance Actor')
             return
         }
 
-        const changeValue = `turn=end,saveDC=${
+        const changeValue = `turn=start,saveDC=${
             caster.system.attributes.spelldc ?? 10
-        },saveAbility=wis,damageRoll=${
+        },saveAbility=con,damageRoll=${
             args[0].spellLevel
-        }d8,damageType=psychic,saveDamage=halfdamage,saveRemove=false`
+        }d10,damageType=radiant,saveDamage=halfdamage,saveRemove=false,macro="Sickening Radiance Overtime"`
 
         const updates = {
             Item: {
-                'Maddening Darkness Damage': {
+                'Sickening Radiance Damage': {
                     'data.damage.parts': [
-                        [`${args[0].spellLevel}d8`, 'psychic'],
+                        [`${args[0].spellLevel}d10`, 'radiant'],
                     ],
                     'data.save.dc': caster.system.attributes.spelldc,
                 },
             },
             ActiveEffect: {
-                'Maddening Darkness Damage': {
+                'Sickening Radiance Damage': {
                     changes: [
                         {
                             key: 'flags.midi-qol.OverTime',
@@ -36,14 +36,14 @@ try {
                         },
                     ],
                     disabled: false,
-                    label: 'Maddening Darkness Damage',
-                    icon: 'icons/magic/unholy/silhouette-robe-evil-glow.webp',
+                    label: 'Sickening Radiance Damage',
+                    icon: 'icons/magic/air/air-burst-spiral-large-teal-green.webp',
                     origin: args[0].itemUuid,
                     flags: {
                         ActiveAuras: {
                             isAura: true,
                             aura: 'All',
-                            radius: 60,
+                            radius: 30,
                             alignment: '',
                             type: '',
                             ignoreSelf: true,
@@ -58,7 +58,7 @@ try {
         }
 
         const summoned = await warpgate.spawn(
-            'Maddening Darkness',
+            'Sickening Radiance',
             { embedded: updates },
             {},
             {}
@@ -78,11 +78,11 @@ try {
                         priority: 30,
                     },
                 ],
-                label: 'Maddening Darkness Summon',
+                label: 'Sickening Radiance Summon',
                 duration: { seconds: 600, rounds: 100 },
                 origin: args[0].itemUuid,
                 'flags.dae.stackable': false,
-                icon: 'icons/magic/unholy/silhouette-robe-evil-glow.webp',
+                icon: 'icons/magic/air/air-burst-spiral-large-teal-green.webp',
             },
         ])
 
@@ -105,7 +105,7 @@ try {
     }
 } catch (err) {
     console.error(
-        `${args[0].itemData.name} - Maddening Darkness ${version}`,
+        `${args[0].itemData.name} - Sickening Radiance ${version}`,
         err
     )
 }
