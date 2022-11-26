@@ -43,7 +43,7 @@ try {
                         ActiveAuras: {
                             isAura: true,
                             aura: 'All',
-                            radius: 30,
+                            radius: 25,
                             alignment: '',
                             type: '',
                             ignoreSelf: true,
@@ -51,6 +51,7 @@ try {
                             hidden: false,
                             hostile: false,
                             onlyOnce: false,
+                            displayTemp: true,
                         },
                     },
                 },
