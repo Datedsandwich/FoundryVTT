@@ -115,8 +115,6 @@ if (args[0].tag === 'OnUse') {
         ...effectUuids,
     ]
 
-    console.log(removeUuids)
-
     if (removeUuids.length > 0)
         actor.setFlag('midi-qol', 'concentration-data.removeUuids', removeUuids)
 

@@ -1,6 +1,5 @@
 const version = '10.0.13'
 try {
-    console.log(args[0])
     if (args[0].tag === 'OnUse') {
         if (args[0].failedSaves.length === 0) return
 
@@ -25,8 +24,6 @@ try {
 
             if (exhaustionLevels.length === 0) return 0
 
-            console.log(exhaustionLevels)
-
             return exhaustionLevels[exhaustionLevels.length - 1]
         }
 
@@ -34,8 +31,6 @@ try {
             const currentExhaustionLevel = await getCurrentExhaustionLevel(
                 target
             )
-
-            console.log(`Current Exhaustion Level: ${currentExhaustionLevel}`)
 
             if (currentExhaustionLevel === 5) {
                 await game.dfreds.effectInterface.addEffect({
