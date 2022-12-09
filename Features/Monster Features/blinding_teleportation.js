@@ -2,11 +2,6 @@ if (args[0].tag === 'OnUse') {
     const sourceToken = await fromUuid(args[0].tokenUuid)
     const template = await fromUuid(args[0].templateUuid)
 
-    const centerPosition = canvas.grid.getCenter(
-        template.data.x,
-        template.data.y
-    )
-
     await new Sequence()
         .effect()
         .file(
