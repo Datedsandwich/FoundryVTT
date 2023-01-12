@@ -1,0 +1,5 @@
+{
+    "key": "TokenImage",
+    "value": "art/Creatures/Forgotten%20Adventures/Beasts/Frog_Tiny_Beast_01.png",
+    "predicate": ["self:effect:pest-form"]
+}

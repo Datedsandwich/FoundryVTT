@@ -1,0 +1,5 @@
+{
+    "key": "TokenImage",
+    "value": "art/Creatures/Forgotten%20Adventures/Beasts/Ape_Medium_Beast_02.png",
+    "predicate": ["self:effect:animal-form-ape"]
+}
